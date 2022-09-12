@@ -20,30 +20,32 @@ def random_letters(user_name_letter, user_name, new_letters=1):
 
 def words(user_input, list_used_words, opened_file):
     """Проверка на наличие слова в russian_word.txt. Добавление использованного слова в список"""
-    if user_input == 'stop':
-        return False
-    elif user_input in opened_file and user_input not in list_used_words:
+    if user_input in opened_file and user_input not in list_used_words:
         list_used_words.append(user_input)
         print('Такое слово существует и его ещё не называли.')
-        return user_input
+        return True
     elif user_input in opened_file and user_input in list_used_words:
         print('Вы уже называли это слово.')
         return False
     else:
         print('Такого слова нет ')
+        return False
+
+
+def stop_game(user_input):
+    """Останавливает игру если игрок вводит stop"""
+    if user_input == 'stop':
+        return False
+    return True
 
 
 def correct_user_choice(user_input, user_name_letter):
     """Проверка вводимых букв на то, что они есть в списке предложенных"""
-    valid = False
-    while not valid:
-        user_input = user_input.lower()
+    while True:
         for n in user_input:
             if n not in user_name_letter:
-                input('Таких букв у тебя нет, напиши заново ')
-            else:
-                valid = True
-                return user_input
+                user_input = input('Таких букв у тебя нет, напиши заново ')
+            return user_input
 
 
 def record_score(user_input, user_name):
@@ -65,6 +67,17 @@ def change_letters(user_input, user_name_letters):
     return new_letters
 
 
+def player_order(user_input, user_name, user_name_letters, list_used_words, opened_file):
+
+    correct_user_choice(user_input, user_name_letters)
+    words_2 = words(user_input, list_used_words, opened_file)
+    if not words_2:
+        random_letters(user_name_letters, user_name, 1)
+    else:
+        change_letters_2 = change_letters(user_input, user_name_letters)
+        random_letters(user_name_letters, user_name, change_letters_2)
+        record_score(user_input, user_name)
+
 
 def main():
     print('Привет. \nМы начинаем играть в Scrable\n')
@@ -85,28 +98,14 @@ def main():
         counter += 1
         if counter % 2 == 0:
             user_input = input(f"Ходит {user_name_2}. Введи слово ")
-            correct_user_choice(user_input, user_2_letters)
-            words_2 = words(user_input, list_used_words, opened_file)
-            if words_2 == False:
+            if not stop_game(user_input):
                 break
-            else:
-                record_score(user_input, user_name_2)
-                change_letters_2 = change_letters(user_input, user_2_letters)
-                random_letters(user_2_letters, user_name_2, change_letters_2)
-
+            player_order(user_input, user_name_2, user_2_letters, list_used_words, opened_file)
         else:
             user_input = input(f"Ходит {user_name_1}. Введи слово ")
-            correct_user_choice(user_input, user_1_letters)
-            words_1 = words(user_input, list_used_words, opened_file)
-            if words_1 == False:
+            if not stop_game(user_input):
                 break
-            else:
-                record_score(user_input, user_name_1)
-                change_letters_1 = change_letters(user_input, user_1_letters)
-                random_letters(user_1_letters, user_name_1, change_letters_1)
-
-
-
+            player_order(user_input, user_name_1, user_1_letters, list_used_words, opened_file)
 
 
 if __name__ == '__main__':
