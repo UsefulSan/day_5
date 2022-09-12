@@ -7,9 +7,14 @@ user_2_letters = []
 list_used_words = []
 final_result = {}
 
+
 def random_letters(user_name_letter, user_name, new_letters=1):
-    """Создаётся список из рандомных букв для каждого участника
-    :type user_name_letter: list
+    """
+    Создаётся список из рандомных букв для каждого участника
+    :param user_name_letter: список букв игрока
+    :param user_name: имя игрока
+    :param new_letters: новые буквы
+    :return: возвращает буквы для конкретного игрока
     """
     for i in range(new_letters):
         got_letter = r.choice(alphabet)
@@ -54,6 +59,8 @@ def record_score(user_input, user_name):
         final_result[user_name] += len(user_input)
     else:
         final_result[user_name] += (len(user_input) + 2)
+    a = list(final_result.values())
+    print(f'Выигрывает {user_name}. \nСчет {a[0]}:{a[1]}')
     return None
 
 
@@ -62,13 +69,20 @@ def change_letters(user_input, user_name_letters):
     for i in user_input:
         if i in user_name_letters:
             user_name_letters.remove(i)
-    #random_letters(user_name_letter, user_name, new_letters=1)
-    new_letters = len(user_input) + 1 #Дописать количество букв начисляемых
+    new_letters = len(user_input) + 1
     return new_letters
 
 
 def player_order(user_input, user_name, user_name_letters, list_used_words, opened_file):
-
+    """
+    Происходит ход игрока.
+    :param user_input:
+    :param user_name:
+    :param user_name_letters:
+    :param list_used_words:
+    :param opened_file:
+    :return:
+    """
     correct_user_choice(user_input, user_name_letters)
     words_2 = words(user_input, list_used_words, opened_file)
     if not words_2:
@@ -81,10 +95,8 @@ def player_order(user_input, user_name, user_name_letters, list_used_words, open
 
 def main():
     print('Привет. \nМы начинаем играть в Scrable\n')
-    #user_name_1 = input('Как зовут перового игрока? ')
-    #user_name_2 = input('Как зовут второго игрока? ')
-    user_name_1 = '1'
-    user_name_2 = '2'
+    user_name_1 = input('Как зовут перового игрока? ')
+    user_name_2 = input('Как зовут второго игрока? ')
     final_result[user_name_1] = 0
     final_result[user_name_2] = 0
     print(f'{user_name_1} vs {user_name_2} \n(раздаю случайные буквы)')
