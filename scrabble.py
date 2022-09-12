@@ -60,7 +60,7 @@ def record_score(user_input, user_name):
     else:
         final_result[user_name] += (len(user_input) + 2)
     a = list(final_result.values())
-    print(f'Выигрывает {user_name}. \nСчет {a[0]}:{a[1]}')
+    print(f'Выигрывает {max(final_result, key=final_result.get)}. \nСчет {a[0]}:{a[1]}')
     return None
 
 
